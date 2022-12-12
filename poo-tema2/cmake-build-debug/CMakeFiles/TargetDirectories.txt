@@ -1,0 +1,3 @@
+C:/Users/cosmi/CLionProjects/poo-tema2/cmake-build-debug/CMakeFiles/poo_tema2.dir
+C:/Users/cosmi/CLionProjects/poo-tema2/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/cosmi/CLionProjects/poo-tema2/cmake-build-debug/CMakeFiles/rebuild_cache.dir
