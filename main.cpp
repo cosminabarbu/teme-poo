@@ -1,116 +1,86 @@
 #include <iostream>
-using namespace std;
-class Masa{
-private:
-    bool ocupata;
-    int nr_locuri;
-public:
-    Masa(){
-        ocupata= false;
-        nr_locuri=0;
-    }
-    Masa(bool ocupata, int nr_locuri){
-        this->ocupata = ocupata;
-        this->nr_locuri = nr_locuri;
-    }
-    bool get_ocupata()const{
-        return ocupata;
-    }
-    void set_ocupata(bool ocupata){
-        this->ocupata = ocupata;
-    }
-    int get_nr_locuri()const{
-        return nr_locuri;
-    }
-    void set_nr_locuri(int nr_locuri){
-        this->nr_locuri = nr_locuri;
-    }
+#include "Masa.h"
+#include "Restaurant.h"
+#include "Angajat.h"
+#include "Client.h"
+#include "Persoana.h"
+#include "IOStream.h"
+#include "BazaDeDateRestaurant.h"
+#include <vector>
+#include <string>
+#include <map>
+#include <memory>
+int main() {
+Restaurant r;
+r.citire();
+std::vector<Angajat>angajati={ {"Vasile", 30, "chelner", 23451},
+                               {"Eftemie", 48, "bucatar", 67313},
+                               {"Maria", 23, "chelner", 73928},
+                               {"Catrinel", 37, "ajutor bucatar", 53891}
+                               };
+std::vector<Client>clienti={ {"Moraru Adelin", 30, 6},
+                             {"Ana Cernicov", 42, 10},
+                             {"Sonia Ror", 23, 4}
+                           };
 
-    friend ostream &operator<<(ostream  &out, const Masa &m){
-        if(m.ocupata == true)
-            out<< "Masa de "<< m.nr_locuri<<" persoane este ocupata" << endl;
-        else  out<< "Masa de "<< m.nr_locuri<<" persoane este libera" << endl;
-
-        return out;
-    }
-    ~Masa(){
-        ocupata = false;
-        nr_locuri = 0;
-    }
-
-};
-class Restaurant{
-private:
-    int nr_mese;
-    Masa mese[20]; ///presupunem ca un resturant poate avea max 20 mese
-public:
-    Restaurant(){
-        cout<< "Introduceti numarul de mese: ";
-        cin>>nr_mese;
-        int x;
-        for(int i=0; i<nr_mese; i++){
-            cout<<"  introduceti numarul de locuri pentru masa " << i+1 << endl;
-            cin>>x; cout<<endl;
-            mese[i].set_nr_locuri(x);
-            mese[i].set_ocupata(false);
-
-        }
-    }
-    Restaurant(int nr_mese, Masa mese[]){
-        this->nr_mese = nr_mese;
-        for(int i=0; i<nr_mese; i++)
-            this->mese[i] = mese[i];
-    }
-    ~Restaurant(){
-        nr_mese = 0;
-    }
-    void afiseaza_mese();
-    void cauta_masa(int x);
-    void ocupa_masa(Masa &m);
-    ///void adauga_masa();
-    ///void sterge_masa();
-    ///void adauga_locuri_masa();
-    ///void sterge_locuri_masa();
-
-
-};
-
-void Restaurant :: afiseaza_mese(){
-    cout<< "Restaurantul nostru are urmatoarele mese:  "<<endl;
-    for(int i=0; i<nr_mese; i++)
-    {
-        cout<<"Masa "<< i+1 << " de ";
-        if(mese[i].get_ocupata() == true ) {
-            cout << mese[i].get_nr_locuri() << " persoane este ocupata" << endl;
-        }
-        else cout << mese[i].get_nr_locuri() << " persoane este libera" << endl;
-    }
-
-}
-void Restaurant::ocupa_masa(Masa &m) {
-    m.set_ocupata(true);
-}
-void Restaurant :: cauta_masa(int x){
-    for(int i=0; i<nr_mese; i++) {
-        if (mese[i].get_ocupata() == false && mese[i].get_nr_locuri() >= x) {
-            cout << mese[i];
-            ocupa_masa(mese[i]);
-            cout << "Ati ocupat masa cu nr " << i+1 << endl;
+int key=0;
+do{
+    std::cout<<"Apasati tasta 0 pentru a iesi din program."<<std::endl;
+    std::cout<<"Apasati tasta 1 pentru a afisa detalii despre restaurant."<<std::endl;
+    std::cout<<"Apasati tasta 2 pentru a afisa toti angajatii restaurantului."<<std::endl;
+    std::cout<<"Apasati tasta 3 pentru a afisa toti clientii restaurantului (din ziua curenta)"<<std::endl;
+    std::cout<<"Apasati tasta 4 pentru a cauta un client in baza rezervarii"<<std::endl;
+    std::cout<<"Apasati tasta 5 pentru a cauta o masa cu numarul de locuri cerut de client"<<std::endl;
+    std::cout<<"Apasati tasta 6 pentru a adauga angajatul a"<<std::endl;
+    std::cin>>key;
+    switch(key) {
+        case 0: {
+            key = 0;
             break;
         }
+        case 1: {
+            r.afisare();
+            std::cout << std::endl;
+            break;
+        }
+        case 2: {
+            for (int i = 0; i < angajati.size(); ++i)
+                angajati[i].afis();
+            std::cout << std::endl;
+            break;
+        }
+        case 3: {
+            for (int i = 0; i < clienti.size(); ++i)
+                clienti[i].afis();
+            std::cout << std::endl;
+            break;
+        }
+        case 4: {
+            BazaDeDateRestaurant::FindClientByNrLocuriDorite(4);
+            /* try{
+                 BazaDeDateRestaurant::FindClientByNrLocuriDorite(4);
+             }catch(const Exceptie &exc){
+                 std::cout<<exc<<std::endl;
+             }*/
+
+            break;
+        }
+        case 5: {
+            BazaDeDateRestaurant::FindMasaByNrLocuriRezervare(4);
+            break;
+        }
+        case 6: {
+            Angajat a("Irina", 20, "chelner", 57813);
+            angajati.push_back(a);
+            for (int i = 0; i < angajati.size(); ++i)
+                angajati[i].afis();
+            std::cout << std::endl;
+            break;
+        }
+        default: {
+            std::cout << "Nu ati introdus un numar intre 1 si 6";
+        }
     }
-}
-
-int main()
-{ Restaurant r;
-    r.afiseaza_mese();
-    cout<< "Introduceti nr de persoane pentru care cautati masa " << endl;
-    int x;
-    cin>>x;
-
-    r.cauta_masa(x);
-    ///r.afiseaza_mese();
-
-
+}while(key!=0);
     return 0;
 }
